@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.ActivityProj.model.Activity;
+import org.ActivityProj.model.ActivitySearch;
 import org.ActivityProj.model.User;
 
 public class ActivityRepoistryImple implements ActivityRepoistry {
@@ -123,6 +124,65 @@ public class ActivityRepoistryImple implements ActivityRepoistry {
 		System.out.println(i+ " record deleted....");
 		con.close();
 		}
+	
+	@Override
+	public List<Activity> findByDescription(List<String> ListOfdescription) throws SQLException {
+		Connection con = db.Connect();
+		List<Activity> listOfActvitiy = new ArrayList<Activity>();
+		for (String description : ListOfdescription) {
+			System.out.println(" fetched description : " + description);
+			String sql = "select * from activity_table where description=? ";
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setString(1, description);
+			ResultSet rs = ps.executeQuery();
+
+			int count =0;
+			while(rs.next()) {
+				System.out.println("Executed for : "+ ++count);
+				Activity activity = new Activity();
+				activity.setId(rs.getInt(1));
+				activity.setDescription(rs.getString(2));
+				activity.setDuration(rs.getInt(3));
+				listOfActvitiy.add(activity);
+			}
+
+			
+		}//end of forEach loop
+		return listOfActvitiy;
+	}
+	
+	
+	@Override
+	public List<Activity> findByDescription2(ActivitySearch activitySearch)  throws SQLException {
+		Connection con = db.Connect();
+		List<Activity> listOfActvitiy = new ArrayList<Activity>();
+		
+		List<String> ListOfdescription =  activitySearch.getDescription();
+		
+		for (String description : ListOfdescription) {
+			System.out.println(" fetched description : " + description);
+			String sql = "select * from activity_table where description=? ";
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setString(1, description);
+			ResultSet rs = ps.executeQuery();
+
+			int count =0;
+			while(rs.next()) {
+				System.out.println("Executed for : "+ ++count);
+				Activity activity = new Activity();
+				activity.setId(rs.getInt(1));
+				activity.setDescription(rs.getString(2));
+				activity.setDuration(rs.getInt(3));
+				listOfActvitiy.add(activity);
+			}
+
+			
+		}//end of forEach loop
+		return listOfActvitiy;
+	}
+	
+	
+	
 	
 	
 	
